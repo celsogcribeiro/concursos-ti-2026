@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Search,
   ShieldCheck,
@@ -9,7 +9,22 @@ import {
   ChevronUp,
   ChevronDown,
   Award,
+  Upload,
+  Download,
+  RotateCcw,
+  AlertCircle,
 } from "lucide-react";
+import {
+  DEFAULT_DATA,
+  loadData,
+  saveData,
+  clearData,
+  parseUploadedFile,
+  type ContestData,
+  type Phase,
+  type Category,
+  type Candidate,
+} from "@/lib/contestData";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -32,124 +47,6 @@ export const Route = createFileRoute("/")({
   }),
   component: Index,
 });
-
-/* ==========================================================================
-   CONFIGURAÇÃO DO CONCURSO
-   ========================================================================== */
-
-const CONTEST = {
-  title: "Telecomunicações Brasileiras S.A. (Telebras)",
-  org: "Telebras",
-  role: "Especialista em Gestão de Telecomunicações — Analista de Tecnologia da Informação (Brasília/DF)",
-  edital: "Edital nº 12 – Telebras, de 23 de junho de 2026",
-  devBy: "Desenvolvido com Claude + Lovable",
-  homologadoPor: "Hermano Studart Lins de Albuquerque — Presidente da Telebras",
-  stats: [
-    { label: "Média (AC)", value: "102.85" },
-    { label: "Maior nota", value: "122.70" },
-    { label: "Homologados", value: "32" },
-  ],
-};
-
-type PhaseStatus = "done" | "current" | "pending";
-type Phase = { id: number; title: string; desc: string; status: PhaseStatus; note: string };
-
-const PHASES: Phase[] = [
-  { id: 1, title: "Fase 1", desc: "Provas objetiva e discursiva", status: "done", note: "Concluída em edital anterior" },
-  { id: 2, title: "Fase 2", desc: "Avaliação de títulos", status: "done", note: CONTEST.edital },
-  { id: 3, title: "Fase 3", desc: "Resultado final e homologação", status: "done", note: "Homologado em 23/06/2026" },
-];
-
-const ALERT_TEXT = `Resultado final homologado. ${CONTEST.homologadoPor}.`;
-
-type Category = { id: "ac" | "pp" | "pcd"; label: string; classificados: number };
-
-const CATEGORIES: Category[] = [
-  { id: "ac", label: "Ampla Concorrência", classificados: 32 },
-  { id: "pp", label: "Pretos e Pardos", classificados: 24 },
-  { id: "pcd", label: "PcD", classificados: 4 },
-];
-
-const QUOTA_BASE_NOTE =
-  "Contagem de candidatos homologados por modalidade de concorrência, conforme edital nº 12 – Telebras, de 23/06/2026. Candidatos de cota também classificados na Ampla Concorrência aparecem marcados como 'também em'.";
-
-type Candidate = {
-  posicao: number;
-  inscricao: string;
-  nome: string;
-  notaTitulos: number;
-  notaFinal: number;
-  categorias: string[];
-};
-
-const CANDIDATES: Record<Category["id"], Candidate[]> = {
-  ac: [
-    { posicao: 1, inscricao: "10010587", nome: "Mauricio de Alexandrino", notaTitulos: 7.5, notaFinal: 122.7, categorias: [] },
-    { posicao: 2, inscricao: "10000796", nome: "Aneliza da Silva Barros", notaTitulos: 11.25, notaFinal: 117.45, categorias: [] },
-    { posicao: 3, inscricao: "10001325", nome: "Murilo Gomes de Souza", notaTitulos: 10.0, notaFinal: 115.19, categorias: ["pp"] },
-    { posicao: 4, inscricao: "10002554", nome: "Rodrigo Rianelly de Macedo Evangelista", notaTitulos: 0.0, notaFinal: 113.34, categorias: [] },
-    { posicao: 5, inscricao: "10005721", nome: "Flavia Cristina de Castro Soares", notaTitulos: 0.0, notaFinal: 111.96, categorias: [] },
-    { posicao: 6, inscricao: "10001993", nome: "Sabrina Soares Campos Silva Coelho", notaTitulos: 11.25, notaFinal: 111.48, categorias: [] },
-    { posicao: 7, inscricao: "10003681", nome: "Ruan Donato Reis Costa", notaTitulos: 0.0, notaFinal: 111.01, categorias: [] },
-    { posicao: 8, inscricao: "10001605", nome: "Jardson de Oliveira da Rocha", notaTitulos: 11.25, notaFinal: 110.9, categorias: [] },
-    { posicao: 9, inscricao: "10006151", nome: "Bruna Roberta Oliveira Nascimento", notaTitulos: 12.5, notaFinal: 107.75, categorias: [] },
-    { posicao: 10, inscricao: "10000899", nome: "Caio Gomes Flausino", notaTitulos: 2.5, notaFinal: 105.35, categorias: [] },
-    { posicao: 11, inscricao: "10006825", nome: "Ricardo Saad Vieira", notaTitulos: 0.0, notaFinal: 104.2, categorias: [] },
-    { posicao: 12, inscricao: "10004639", nome: "Victor Gueresi de Mello Braga", notaTitulos: 0.0, notaFinal: 103.62, categorias: [] },
-    { posicao: 13, inscricao: "10008430", nome: "Luis Eduardo Alkmin La Torre", notaTitulos: 2.5, notaFinal: 101.78, categorias: ["pp"] },
-    { posicao: 14, inscricao: "10005215", nome: "Aecio Fernandes Galiza Magalhaes", notaTitulos: 0.0, notaFinal: 101.2, categorias: ["pp"] },
-    { posicao: 15, inscricao: "10010964", nome: "Caio Ribeiro Galvao", notaTitulos: 0.0, notaFinal: 99.65, categorias: [] },
-    { posicao: 16, inscricao: "10007299", nome: "Arley Pinheiro Mendes", notaTitulos: 0.0, notaFinal: 99.48, categorias: [] },
-    { posicao: 17, inscricao: "10004271", nome: "Cosme Diego da Silva Augusto", notaTitulos: 1.25, notaFinal: 99.32, categorias: ["pcd"] },
-    { posicao: 18, inscricao: "10005850", nome: "Jonas Prado Soares", notaTitulos: 0.0, notaFinal: 99.25, categorias: [] },
-    { posicao: 19, inscricao: "10003548", nome: "Pedro Teixeira Jacobina Aires", notaTitulos: 2.5, notaFinal: 98.78, categorias: [] },
-    { posicao: 20, inscricao: "10007140", nome: "Daniel Feitosa Ferreira Silva", notaTitulos: 0.0, notaFinal: 98.6, categorias: ["pp"] },
-    { posicao: 21, inscricao: "10003034", nome: "Rafael Valentim Fonseca", notaTitulos: 2.5, notaFinal: 98.51, categorias: [] },
-    { posicao: 22, inscricao: "10002970", nome: "Matheus Ribeiro Gomes Herculano", notaTitulos: 2.5, notaFinal: 98.28, categorias: ["pp"] },
-    { posicao: 23, inscricao: "10010881", nome: "Otavio Gomes Lumba de Oliveira", notaTitulos: 0.0, notaFinal: 98.01, categorias: [] },
-    { posicao: 24, inscricao: "10002320", nome: "Victor Hugo Nascimento Silva", notaTitulos: 0.0, notaFinal: 97.6, categorias: ["pp"] },
-    { posicao: 25, inscricao: "10006276", nome: "Matheus de Souza Watanabe", notaTitulos: 0.0, notaFinal: 97.49, categorias: [] },
-    { posicao: 26, inscricao: "10006298", nome: "Eduardo Santos Diniz", notaTitulos: 0.0, notaFinal: 97.3, categorias: ["pp"] },
-    { posicao: 27, inscricao: "10003734", nome: "Mateus de Souza Pequeno Furtado de Mendonca", notaTitulos: 0.0, notaFinal: 96.83, categorias: [] },
-    { posicao: 28, inscricao: "10008498", nome: "Vitor Rodrigues de Albuquerque", notaTitulos: 1.25, notaFinal: 95.45, categorias: [] },
-    { posicao: 29, inscricao: "10007914", nome: "Angela de Oliveira Mito", notaTitulos: 0.0, notaFinal: 95.23, categorias: [] },
-    { posicao: 30, inscricao: "10009232", nome: "Carlos Eduardo Horita", notaTitulos: 0.0, notaFinal: 94.54, categorias: [] },
-    { posicao: 31, inscricao: "10009274", nome: "Victor Koschel de Andrade", notaTitulos: 0.0, notaFinal: 94.49, categorias: [] },
-    { posicao: 32, inscricao: "10007642", nome: "Andrea Pinheiro Brasil de Carvalho", notaTitulos: 0.0, notaFinal: 94.43, categorias: [] },
-  ],
-  pp: [
-    { posicao: 1, inscricao: "10001325", nome: "Murilo Gomes de Souza", notaTitulos: 10.0, notaFinal: 115.19, categorias: ["ac"] },
-    { posicao: 2, inscricao: "10003450", nome: "Marcileide Cardoso de Souza", notaTitulos: 12.5, notaFinal: 102.93, categorias: [] },
-    { posicao: 3, inscricao: "10008430", nome: "Luis Eduardo Alkmin La Torre", notaTitulos: 2.5, notaFinal: 101.78, categorias: ["ac"] },
-    { posicao: 4, inscricao: "10006373", nome: "Wilfredo Enrique Pacheco Hernandez", notaTitulos: 10.0, notaFinal: 101.2, categorias: [] },
-    { posicao: 5, inscricao: "10005215", nome: "Aecio Fernandes Galiza Magalhaes", notaTitulos: 0.0, notaFinal: 101.2, categorias: ["ac"] },
-    { posicao: 6, inscricao: "10004287", nome: "Bruno Aires de Sousa", notaTitulos: 12.5, notaFinal: 100.13, categorias: [] },
-    { posicao: 7, inscricao: "10007140", nome: "Daniel Feitosa Ferreira Silva", notaTitulos: 0.0, notaFinal: 98.6, categorias: ["ac"] },
-    { posicao: 8, inscricao: "10002970", nome: "Matheus Ribeiro Gomes Herculano", notaTitulos: 2.5, notaFinal: 98.28, categorias: ["ac"] },
-    { posicao: 9, inscricao: "10002346", nome: "William Silva Dias", notaTitulos: 7.5, notaFinal: 97.76, categorias: [] },
-    { posicao: 10, inscricao: "10002320", nome: "Victor Hugo Nascimento Silva", notaTitulos: 0.0, notaFinal: 97.6, categorias: ["ac"] },
-    { posicao: 11, inscricao: "10006298", nome: "Eduardo Santos Diniz", notaTitulos: 0.0, notaFinal: 97.3, categorias: ["ac"] },
-    { posicao: 12, inscricao: "10003236", nome: "Hercules Fortes de Andrade", notaTitulos: 11.25, notaFinal: 93.52, categorias: [] },
-    { posicao: 13, inscricao: "10005627", nome: "Caio Vinicius Rodrigues Moreira", notaTitulos: 0.0, notaFinal: 91.52, categorias: [] },
-    { posicao: 14, inscricao: "10004593", nome: "Leandro dos Santos Matos", notaTitulos: 1.25, notaFinal: 91.48, categorias: [] },
-    { posicao: 15, inscricao: "10005427", nome: "Isac Mamede Pereira Santos", notaTitulos: 1.25, notaFinal: 87.06, categorias: [] },
-    { posicao: 16, inscricao: "10006371", nome: "Isaque Augusto da Silva Santos", notaTitulos: 0.0, notaFinal: 84.95, categorias: [] },
-    { posicao: 17, inscricao: "10007794", nome: "Victor de Sousa Alencar", notaTitulos: 0.0, notaFinal: 84.89, categorias: [] },
-    { posicao: 18, inscricao: "10003463", nome: "Raoni Costa Oliveira", notaTitulos: 2.5, notaFinal: 84.73, categorias: [] },
-    { posicao: 19, inscricao: "10000152", nome: "Denis Adonis de Novaes Rego", notaTitulos: 2.5, notaFinal: 84.71, categorias: [] },
-    { posicao: 20, inscricao: "10003362", nome: "Francisco Henrique Moreira Firmino", notaTitulos: 0.0, notaFinal: 83.87, categorias: [] },
-    { posicao: 21, inscricao: "10001675", nome: "Laiane Ricardo de Araujo", notaTitulos: 1.25, notaFinal: 82.08, categorias: [] },
-    { posicao: 22, inscricao: "10005491", nome: "Mateus de Oliveira Rodrigues", notaTitulos: 0.0, notaFinal: 81.78, categorias: [] },
-    { posicao: 23, inscricao: "10006284", nome: "Filipe Guimaraes de Oliveira", notaTitulos: 0.0, notaFinal: 80.73, categorias: [] },
-    { posicao: 24, inscricao: "10004020", nome: "Karen Gabrielle Fernandes Rodrigues", notaTitulos: 0.0, notaFinal: 78.84, categorias: [] },
-  ],
-  pcd: [
-    { posicao: 1, inscricao: "10004271", nome: "Cosme Diego da Silva Augusto", notaTitulos: 1.25, notaFinal: 99.32, categorias: ["ac"] },
-    { posicao: 2, inscricao: "10007463", nome: "Joao Gabriel de Sousa Barbosa", notaTitulos: 11.25, notaFinal: 97.06, categorias: [] },
-    { posicao: 3, inscricao: "10002195", nome: "Julio Breves dos Santos Neto", notaTitulos: 0.0, notaFinal: 93.13, categorias: [] },
-    { posicao: 4, inscricao: "10008814", nome: "Celso Gustavo Cavalcante Ribeiro", notaTitulos: 2.5, notaFinal: 90.13, categorias: [] },
-  ],
-};
 
 function PhaseStamp({ phase }: { phase: Phase }) {
   const isDone = phase.status === "done";
@@ -183,9 +80,8 @@ function PhaseStamp({ phase }: { phase: Phase }) {
   );
 }
 
-function QuotaCard({ category }: { category: Category }) {
-  const list = CANDIDATES[category.id] || [];
-  const best = list.length ? Math.max(...list.map((c) => c.notaFinal)) : 0;
+function QuotaCard({ category, candidates }: { category: Category; candidates: Candidate[] }) {
+  const best = candidates.length ? Math.max(...candidates.map((c) => c.notaFinal)) : 0;
   return (
     <div className="bg-[#FBF9F3] border border-[#E4DFD0] rounded-lg p-4 relative overflow-hidden">
       <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#A9822F]" />
@@ -200,19 +96,22 @@ function QuotaCard({ category }: { category: Category }) {
   );
 }
 
-function useSortedCandidates(list: Candidate[], sortDir: "asc" | "desc") {
-  return useMemo(() => {
-    return [...list].sort((a, b) => (sortDir === "desc" ? b.notaFinal - a.notaFinal : a.notaFinal - b.notaFinal));
-  }, [list, sortDir]);
-}
-
-function ClassificationTable() {
-  const [activeTab, setActiveTab] = useState<Category["id"]>(CATEGORIES[0].id);
+function ClassificationTable({ data }: { data: ContestData }) {
+  const [activeTab, setActiveTab] = useState<string>(data.categories[0]?.id ?? "");
   const [query, setQuery] = useState("");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
 
-  const rawList = CANDIDATES[activeTab] || [];
-  const sorted = useSortedCandidates(rawList, sortDir);
+  useEffect(() => {
+    if (!data.categories.find((c) => c.id === activeTab)) {
+      setActiveTab(data.categories[0]?.id ?? "");
+    }
+  }, [data.categories, activeTab]);
+
+  const rawList = data.candidates[activeTab] ?? [];
+  const sorted = useMemo(
+    () => [...rawList].sort((a, b) => (sortDir === "desc" ? b.notaFinal - a.notaFinal : a.notaFinal - b.notaFinal)),
+    [rawList, sortDir],
+  );
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -220,12 +119,12 @@ function ClassificationTable() {
     return sorted.filter((c) => c.nome.toLowerCase().includes(q) || c.inscricao.includes(q));
   }, [sorted, query]);
 
-  const categoryLabel = (id: string) => CATEGORIES.find((c) => c.id === id)?.label;
+  const categoryLabel = (id: string) => data.categories.find((c) => c.id === id)?.label ?? id;
 
   return (
     <div>
       <div className="flex flex-wrap gap-2 mb-4">
-        {CATEGORIES.map((cat) => (
+        {data.categories.map((cat) => (
           <button
             key={cat.id}
             onClick={() => setActiveTab(cat.id)}
@@ -277,12 +176,12 @@ function ClassificationTable() {
           </thead>
           <tbody>
             {filtered.map((c, i) => (
-              <tr key={c.inscricao} className={i % 2 === 0 ? "bg-white" : "bg-[#FBF9F3]"}>
+              <tr key={`${c.inscricao}-${i}`} className={i % 2 === 0 ? "bg-white" : "bg-[#FBF9F3]"}>
                 <td className="px-3 py-2 font-mono text-[#5B6472]">{c.posicao}º</td>
                 <td className="px-3 py-2 font-mono text-[#14213D]">{c.inscricao}</td>
                 <td className="px-3 py-2 text-[#14213D]">
                   {c.nome}
-                  {c.categorias.length > 0 && (
+                  {c.categorias && c.categorias.length > 0 && (
                     <span className="ml-2 text-[10px] text-[#A9822F]">
                       também em {c.categorias.map(categoryLabel).join(", ")}
                     </span>
@@ -296,28 +195,158 @@ function ClassificationTable() {
         </table>
       </div>
       <p className="mt-2 text-[11px] text-[#9B968A]">
-        Base: item 2.1.2 do Edital nº 12 – Telebras, de 23/06/2026. Resultado final homologado — não cabe recurso.
+        Base: {data.contest.edital}. Resultado final homologado — não cabe recurso.
       </p>
     </div>
   );
 }
 
+function UploadPanel({
+  onLoad,
+  onReset,
+  data,
+}: {
+  onLoad: (d: ContestData) => void;
+  onReset: () => void;
+  data: ContestData;
+}) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [status, setStatus] = useState<{ kind: "idle" | "success" | "error"; msg: string }>({
+    kind: "idle",
+    msg: "",
+  });
+
+  async function handleFile(file: File) {
+    try {
+      const text = await file.text();
+      const parsed = parseUploadedFile(text, file.name);
+      onLoad(parsed);
+      const total = Object.values(parsed.candidates).reduce((n, arr) => n + arr.length, 0);
+      setStatus({
+        kind: "success",
+        msg: `Carregado: ${parsed.phases.length} fases, ${parsed.categories.length} modalidades, ${total} candidatos.`,
+      });
+    } catch (err) {
+      setStatus({ kind: "error", msg: (err as Error).message });
+    }
+  }
+
+  function handleDownloadTemplate() {
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "telebras-dados.json";
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  return (
+    <section className="mb-10 border border-[#E4DFD0] bg-white rounded-lg p-5">
+      <div className="flex items-start justify-between gap-4 flex-wrap">
+        <div>
+          <h2 className="text-[13px] uppercase tracking-wide text-[#5B6472] flex items-center gap-2">
+            <Upload size={14} className="text-[#A9822F]" /> Atualizar dados do sistema
+          </h2>
+          <p className="text-[12px] text-[#5B6472] mt-1 max-w-xl">
+            Envie um arquivo <code className="font-mono">.json</code>,{" "}
+            <code className="font-mono">.js</code>, <code className="font-mono">.ts</code>,{" "}
+            <code className="font-mono">.jsx</code> ou <code className="font-mono">.tsx</code> contendo
+            as constantes <code className="font-mono">CONTEST</code>, <code className="font-mono">PHASES</code>,{" "}
+            <code className="font-mono">CATEGORIES</code> e <code className="font-mono">CANDIDATES</code>. As fases,
+            modalidades e a classificação serão atualizadas automaticamente.
+          </p>
+        </div>
+        <div className="flex gap-2 flex-wrap">
+          <input
+            ref={inputRef}
+            type="file"
+            accept=".json,.js,.ts,.jsx,.tsx,application/json,text/plain"
+            className="hidden"
+            onChange={(e) => {
+              const f = e.target.files?.[0];
+              if (f) handleFile(f);
+              e.target.value = "";
+            }}
+          />
+          <button
+            onClick={() => inputRef.current?.click()}
+            className="px-3 py-1.5 text-[13px] rounded-md bg-[#14213D] text-[#F7F4EC] hover:bg-[#0e1930] flex items-center gap-2"
+          >
+            <Upload size={14} /> Enviar arquivo
+          </button>
+          <button
+            onClick={handleDownloadTemplate}
+            className="px-3 py-1.5 text-[13px] rounded-md border border-[#E4DFD0] text-[#14213D] hover:border-[#A9822F] flex items-center gap-2"
+          >
+            <Download size={14} /> Baixar template
+          </button>
+          <button
+            onClick={() => {
+              onReset();
+              setStatus({ kind: "success", msg: "Dados restaurados para o padrão." });
+            }}
+            className="px-3 py-1.5 text-[13px] rounded-md border border-[#E4DFD0] text-[#5B6472] hover:border-[#A9822F] flex items-center gap-2"
+          >
+            <RotateCcw size={14} /> Restaurar padrão
+          </button>
+        </div>
+      </div>
+      {status.kind !== "idle" && (
+        <div
+          className={[
+            "mt-4 text-[12px] rounded-md px-3 py-2 flex items-start gap-2",
+            status.kind === "success"
+              ? "bg-[#EAF2ED] text-[#2F6B4F] border border-[#A9C7B6]"
+              : "bg-[#FBEAEA] text-[#8A2F2F] border border-[#E0B4B4]",
+          ].join(" ")}
+        >
+          {status.kind === "success" ? (
+            <CheckCircle2 size={14} className="shrink-0 mt-0.5" />
+          ) : (
+            <AlertCircle size={14} className="shrink-0 mt-0.5" />
+          )}
+          <span>{status.msg}</span>
+        </div>
+      )}
+    </section>
+  );
+}
+
 function Index() {
+  const [data, setData] = useState<ContestData>(DEFAULT_DATA);
+
+  useEffect(() => {
+    setData(loadData());
+  }, []);
+
+  const handleLoad = (d: ContestData) => {
+    setData(d);
+    saveData(d);
+  };
+  const handleReset = () => {
+    clearData();
+    setData(DEFAULT_DATA);
+  };
+
   return (
     <div className="min-h-screen bg-[#F7F4EC]" style={{ fontFamily: "Inter, system-ui, sans-serif" }}>
       <div className="max-w-4xl mx-auto px-6 py-10">
         <header className="border-b-2 border-[#14213D] pb-6 mb-8">
           <div className="flex items-center gap-2 text-[#A9822F] mb-2">
             <ShieldCheck size={18} />
-            <span className="text-[11px] uppercase tracking-[0.15em] font-medium">{CONTEST.org}</span>
+            <span className="text-[11px] uppercase tracking-[0.15em] font-medium">{data.contest.org}</span>
           </div>
-          <h1 className="text-[32px] leading-tight text-[#14213D]" style={{ fontFamily: "'Source Serif 4', Georgia, serif" }}>
-            Resultado — {CONTEST.role}
+          <h1
+            className="text-[32px] leading-tight text-[#14213D]"
+            style={{ fontFamily: "'Source Serif 4', Georgia, serif" }}
+          >
+            Resultado — {data.contest.role}
           </h1>
-          <p className="text-[13px] text-[#5B6472] mt-1">{CONTEST.edital}</p>
+          <p className="text-[13px] text-[#5B6472] mt-1">{data.contest.edital}</p>
 
           <div className="grid grid-cols-3 gap-4 mt-6">
-            {CONTEST.stats.map((s) => (
+            {data.contest.stats.map((s) => (
               <div key={s.label} className="border-l-2 border-[#E4DFD0] pl-3">
                 <p className="text-[11px] uppercase tracking-wide text-[#5B6472]">{s.label}</p>
                 <p className="font-mono text-2xl text-[#14213D] mt-0.5">{s.value}</p>
@@ -326,14 +355,19 @@ function Index() {
           </div>
         </header>
 
+        <UploadPanel onLoad={handleLoad} onReset={handleReset} data={data} />
+
         <section className="mb-10">
           <h2 className="text-[13px] uppercase tracking-wide text-[#5B6472] mb-5 flex items-center gap-2">
             <Award size={14} className="text-[#A9822F]" /> Andamento das fases
           </h2>
           <div className="relative">
             <div className="absolute top-7 left-7 right-7 h-px bg-[repeating-linear-gradient(90deg,#C7C2B4_0,#C7C2B4_6px,transparent_6px,transparent_12px)]" />
-            <div className="grid gap-2 relative" style={{ gridTemplateColumns: `repeat(${PHASES.length}, minmax(0, 1fr))` }}>
-              {PHASES.map((phase) => (
+            <div
+              className="grid gap-2 relative"
+              style={{ gridTemplateColumns: `repeat(${data.phases.length}, minmax(0, 1fr))` }}
+            >
+              {data.phases.map((phase) => (
                 <PhaseStamp key={phase.id} phase={phase} />
               ))}
             </div>
@@ -342,27 +376,27 @@ function Index() {
 
         <div className="bg-[#EAF2ED] border border-[#A9C7B6] text-[#2F6B4F] text-[13px] rounded-lg px-4 py-3 mb-10 flex items-center gap-2">
           <CheckCircle2 size={16} className="shrink-0" />
-          {ALERT_TEXT}
+          {data.alertText}
         </div>
 
         <section className="mb-10">
           <h2 className="text-[13px] uppercase tracking-wide text-[#5B6472] mb-4">Homologados por modalidade</h2>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {CATEGORIES.map((cat) => (
-              <QuotaCard key={cat.id} category={cat} />
+            {data.categories.map((cat) => (
+              <QuotaCard key={cat.id} category={cat} candidates={data.candidates[cat.id] ?? []} />
             ))}
           </div>
-          <p className="mt-3 text-[11px] text-[#9B968A] max-w-2xl">{QUOTA_BASE_NOTE}</p>
+          <p className="mt-3 text-[11px] text-[#9B968A] max-w-2xl">{data.quotaBaseNote}</p>
         </section>
 
         <section>
           <h2 className="text-[13px] uppercase tracking-wide text-[#5B6472] mb-4">Classificação</h2>
-          <ClassificationTable />
+          <ClassificationTable data={data} />
         </section>
 
         <footer className="mt-12 pt-6 border-t border-[#E4DFD0] text-center">
-          <p className="text-[11px] text-[#5B6472]">{CONTEST.homologadoPor}</p>
-          <p className="text-[11px] text-[#9B968A] mt-1">{CONTEST.devBy}</p>
+          <p className="text-[11px] text-[#5B6472]">{data.contest.homologadoPor}</p>
+          <p className="text-[11px] text-[#9B968A] mt-1">{data.contest.devBy}</p>
         </footer>
       </div>
     </div>
