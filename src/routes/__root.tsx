@@ -77,14 +77,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
+      { title: "Resultado Telebras — Analista de TI (Brasília/DF)" },
+      { name: "description", content: "Resultado final homologado do concurso Telebras — Especialista em Gestão de Telecomunicações, Analista de TI (Brasília/DF), Edital nº 12 de 23/06/2026." },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { property: "og:title", content: "Resultado Telebras — Analista de TI (Brasília/DF)" },
+      { property: "og:description", content: "Resultado final homologado do concurso Telebras — Especialista em Gestão de Telecomunicações, Analista de TI (Brasília/DF), Edital nº 12 de 23/06/2026." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "Resultado Telebras — Analista de TI (Brasília/DF)" },
+      { name: "twitter:description", content: "Resultado final homologado do concurso Telebras — Especialista em Gestão de Telecomunicações, Analista de TI (Brasília/DF), Edital nº 12 de 23/06/2026." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/15cc5c46-b252-4b29-a806-478c0a7cfa95/id-preview-74822c30--cf0c7d16-e5b0-4f8a-8997-f18792988009.lovable.app-1784330947132.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/15cc5c46-b252-4b29-a806-478c0a7cfa95/id-preview-74822c30--cf0c7d16-e5b0-4f8a-8997-f18792988009.lovable.app-1784330947132.png" },
     ],
     links: [
       {

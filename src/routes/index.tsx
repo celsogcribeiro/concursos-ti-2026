@@ -20,11 +20,11 @@ export const Route = createFileRoute("/")({
         content:
           "Resultado final homologado do concurso Telebras — Especialista em Gestão de Telecomunicações, Analista de TI (Brasília/DF), Edital nº 12 de 23/06/2026.",
       },
-      { property: "og:title", content: "Resultado Telebras — Analista de TI" },
+      { property: "og:title", content: "Resultado Telebras — Analista de TI (Brasília/DF)" },
       {
         property: "og:description",
         content:
-          "Classificação final homologada por modalidade de concorrência — Edital nº 12 – Telebras, 23/06/2026.",
+          "Resultado final homologado do concurso Telebras — Especialista em Gestão de Telecomunicações, Analista de TI (Brasília/DF), Edital nº 12 de 23/06/2026.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
