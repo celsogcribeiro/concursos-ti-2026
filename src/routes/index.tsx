@@ -47,11 +47,9 @@ const PHASES: Phase[] = [
 
 const ALERT_TEXT = "Resultado final homologado.";
 
-type Category = { id: string; label: string; classificados: number; vagas: number };
+type Category = { id: string; label: string; classificados: number; vagas: number; limite: number };
 
-type CategoryExt = Category & { limite: number };
-
-const CATEGORIES: CategoryExt[] = [
+const CATEGORIES: Category[] = [
   { id: "ac", label: "Ampla Concorrência", classificados: 32, vagas: 1, limite: 31 },
   { id: "pp", label: "Pretos e Pardos", classificados: 24, vagas: 1, limite: 13 },
   { id: "pcd", label: "PcD", classificados: 4, vagas: 0, limite: 3 },
