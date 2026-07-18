@@ -9,6 +9,9 @@ import {
   ChevronUp,
   ChevronDown,
   Award,
+  Users,
+  BarChart3,
+  Trophy,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
