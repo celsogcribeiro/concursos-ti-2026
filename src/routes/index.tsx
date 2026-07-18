@@ -28,7 +28,7 @@ const CONTEST = {
   role: "Especialista em Gestão de Telecomunicações — Analista de Tecnologia da Informação (Brasília/DF)",
   edital: "Edital nº 12 – Telebras, de 23 de junho de 2026",
   devBy: "Desenvolvido com Claude + Lovable",
-  homologadoPor: "Hermano Studart Lins de Albuquerque — Presidente da Telebras",
+  
   stats: [
     { label: "Média (AC)", value: "102.85" },
     { label: "Maior nota", value: "122.70" },
