@@ -352,7 +352,7 @@ function ClassificationTable({
             {filtered.map((c, i) => (
               <tr key={c.inscricao} className={i % 2 === 0 ? "bg-white" : "bg-[#FBF9F3]"}>
                 <td className="px-3 py-2">
-                  <PositionBadge pos={c.posicao} vagas={activeCatConfig?.vagas ?? 0} />
+                  <PositionBadge pos={c.posicao} vagas={activeCatConfig?.vagas ?? 0} limite={activeCatConfig?.limite ?? 0} />
                 </td>
                 <td className="px-3 py-2 font-mono text-[#14213D]">{c.inscricao}</td>
                 <td className="px-3 py-2 text-[#14213D]">
