@@ -427,7 +427,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-[#F7F4EC]" style={{ fontFamily: "Inter, system-ui, sans-serif" }}>
-      <div className="max-w-4xl mx-auto px-6 py-10">
+      <div className="max-w-7xl mx-auto px-6 py-10">
         {/* Masthead */}
         <header className="border-b-2 border-[#14213D] pb-6 mb-8">
           <div className="flex items-center gap-2 text-[#A9822F] mb-2">
