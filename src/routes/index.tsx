@@ -54,9 +54,9 @@ const CATEGORIES: Category[] = [
 ];
 
 const CATEGORY_STYLES: Record<string, { accent: string; tint: string; badgeBorder: string; badgeBg: string; badgeText: string }> = {
-  ac: { accent: "#2E5C8A", tint: "#EAF2FB", badgeBorder: "#8FB5E0", badgeBg: "#EAF2FB", badgeText: "#1D4E89" },
-  pp: { accent: "#7A5AB0", tint: "#F4EEFC", badgeBorder: "#C6AEEA", badgeBg: "#F4EEFC", badgeText: "#5B3E96" },
-  pcd: { accent: "#B8860A", tint: "#FDF4DD", badgeBorder: "#EAC468", badgeBg: "#FDF4DD", badgeText: "#8A6A16" },
+  ac: { accent: "#C9A227", tint: "#FBF3DE", badgeBorder: "#8FB5E0", badgeBg: "#EAF2FB", badgeText: "#1D4E89" },
+  pp: { accent: "#C9A227", tint: "#FBF3DE", badgeBorder: "#D9C5F5", badgeBg: "#F1EAFB", badgeText: "#6D3FC4" },
+  pcd: { accent: "#C9A227", tint: "#FBF3DE", badgeBorder: "#F0C878", badgeBg: "#FDF1DC", badgeText: "#9A6B1D" },
 };
 
 const QUOTA_BASE_NOTE =
@@ -223,11 +223,13 @@ function PositionBadge({ pos, vagas, limite }: { pos: number; vagas: number; lim
   let bg = "#F1EFE7";
   let border = "#D8D2C1";
   let color = "#7A7566";
+  let solid = false;
   if (vagas > 0 && pos <= vagas) {
     // Vagas imediatas
-    bg = "#DCF5E3";
-    border = "#7FC79A";
-    color = "#1F7A43";
+    bg = "#1F9D5C";
+    border = "#1F9D5C";
+    color = "#FFFFFF";
+    solid = true;
   } else if (limite > 0 && pos > vagas && pos <= vagas + limite) {
     // Cadastro de reserva: começa a contar após as vagas imediatas
     bg = "#FDECD1";
@@ -236,7 +238,7 @@ function PositionBadge({ pos, vagas, limite }: { pos: number; vagas: number; lim
   }
   return (
     <span
-      className="inline-flex items-center justify-center rounded-full font-mono text-[12px] font-medium"
+      className={["inline-flex items-center justify-center rounded-full font-mono text-[12px]", solid ? "font-semibold" : "font-medium"].join(" ")}
       style={{ width: 30, height: 30, background: bg, border: `1px solid ${border}`, color }}
     >
       {pos}º
@@ -293,17 +295,16 @@ function ClassificationTable({
     <div>
       <div className="flex flex-wrap gap-2 mb-4">
         {CATEGORIES.map((cat) => {
-          const style = CATEGORY_STYLES[cat.id];
           const isActive = activeCategory === cat.id;
           return (
             <button
               key={cat.id}
               onClick={() => onChangeCategory(cat.id)}
-              className="px-3 py-1.5 text-[13px] rounded-md transition-colors"
+              className="px-3 py-1.5 text-[13px] rounded-full transition-colors"
               style={{
-                background: isActive ? style.accent : "transparent",
+                background: isActive ? "#14213D" : "#FFFFFF",
                 color: isActive ? "#FFFFFF" : "#5B6472",
-                border: `1px solid ${isActive ? style.accent : "#E4DFD0"}`,
+                border: `1px solid ${isActive ? "#14213D" : "#E4DFD0"}`,
               }}
             >
               {cat.label}
@@ -387,50 +388,56 @@ function App() {
   const [activeCategory, setActiveCategory] = useState<string>(CATEGORIES[0].id);
 
   return (
-    <div className="min-h-screen bg-[#F7F4EC]" style={{ fontFamily: "Inter, system-ui, sans-serif" }}>
+    <div className="min-h-screen bg-[#F5F4EF]" style={{ fontFamily: "Inter, system-ui, sans-serif" }}>
+      {/* Masthead — faixa escura full-width */}
+      <header className="bg-[#101B33]">
+        <div className="max-w-4xl mx-auto px-6 py-6">
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-5">
+            <div>
+              <div className="flex items-center gap-2 text-[#C9A227] mb-2">
+                <ShieldCheck size={18} />
+                <span className="text-[11px] uppercase tracking-[0.15em] font-medium">{CONTEST.org}</span>
+              </div>
+              <h1
+                className="text-[28px] leading-tight text-white"
+                style={{ fontFamily: "'Source Serif 4', Georgia, serif" }}
+              >
+                Resultado — {CONTEST.role}
+              </h1>
+              <p className="text-[13px] text-[#8D94A8] mt-1">{CONTEST.edital}</p>
+            </div>
+
+            <div className="flex flex-wrap gap-2 shrink-0">
+              {(() => {
+                const list = CANDIDATES[activeCategory] || [];
+                const catLabel = CATEGORIES.find((c) => c.id === activeCategory)?.label ?? "";
+                const shortLabel =
+                  activeCategory === "ac" ? "AC" : activeCategory === "pp" ? "PP" : activeCategory === "pcd" ? "PcD" : catLabel;
+                const notas = list.map((c) => c.notaFinal);
+                const media = notas.length ? notas.reduce((a, b) => a + b, 0) / notas.length : 0;
+                const maior = notas.length ? Math.max(...notas) : 0;
+                const homologados = list.length;
+                const items = [
+                  { label: `Média (${shortLabel})`, value: media.toFixed(2) },
+                  { label: "Maior nota", value: maior.toFixed(2) },
+                  { label: "Homologados", value: String(homologados) },
+                ];
+                return items.map((item) => (
+                  <div key={item.label} className="bg-[#1B2A4A] border border-[#2C3E62] rounded-lg px-4 py-2 min-w-[110px]">
+                    <p className="text-[10px] uppercase tracking-wide text-[#8D94A8]">{item.label}</p>
+                    <p className="font-mono text-xl text-white mt-0.5">{item.value}</p>
+                  </div>
+                ));
+              })()}
+            </div>
+          </div>
+          <p className="text-[11px] text-[#5F6779] text-right mt-4">{CONTEST.devBy}</p>
+        </div>
+      </header>
+
       <div className="max-w-4xl mx-auto px-6 py-10">
-        {/* Masthead */}
-        <header className="border-b-2 border-[#14213D] pb-6 mb-8">
-          <div className="flex items-center gap-2 text-[#A9822F] mb-2">
-            <ShieldCheck size={18} />
-            <span className="text-[11px] uppercase tracking-[0.15em] font-medium">{CONTEST.org}</span>
-          </div>
-          <h1
-            className="text-[32px] leading-tight text-[#14213D]"
-            style={{ fontFamily: "'Source Serif 4', Georgia, serif" }}
-          >
-            Resultado — {CONTEST.role}
-          </h1>
-          <p className="text-[13px] text-[#5B6472] mt-1">{CONTEST.edital}</p>
-
-          <div className="flex flex-wrap items-center gap-x-5 gap-y-1.5 mt-5 py-2.5 px-4 rounded-lg bg-white/60 border border-[#E5DFCF] text-sm">
-            {(() => {
-              const list = CANDIDATES[activeCategory] || [];
-              const catLabel = CATEGORIES.find((c) => c.id === activeCategory)?.label ?? "";
-              const shortLabel =
-                activeCategory === "ac" ? "AC" : activeCategory === "pp" ? "PP" : activeCategory === "pcd" ? "PcD" : catLabel;
-              const notas = list.map((c) => c.notaFinal);
-              const media = notas.length ? notas.reduce((a, b) => a + b, 0) / notas.length : 0;
-              const maior = notas.length ? Math.max(...notas) : 0;
-              const homologados = list.length;
-              const items = [
-                { label: `Média (${shortLabel})`, value: media.toFixed(2) },
-                { label: "Maior nota", value: maior.toFixed(2) },
-                { label: "Homologados", value: String(homologados) },
-              ];
-              return items.map((item, i) => (
-                <div key={item.label} className="flex items-baseline gap-1.5">
-                  {i > 0 && <span className="text-[#D8D2C4] mr-3">|</span>}
-                  <span className="text-[11px] uppercase tracking-wide text-[#5B6472]">{item.label}</span>
-                  <span className="font-mono text-[#14213D] font-medium">{item.value}</span>
-                </div>
-              ));
-            })()}
-          </div>
-        </header>
-
         {/* Phase timeline */}
-        <section className="mb-10">
+        <section className="mb-10 mt-2">
           <h2 className="text-[13px] uppercase tracking-wide text-[#5B6472] mb-5 flex items-center gap-2">
             <Award size={14} className="text-[#A9822F]" /> Andamento das fases
           </h2>
@@ -493,12 +500,9 @@ function App() {
           <h2 className="text-[13px] uppercase tracking-wide text-[#5B6472] mb-4">Classificação</h2>
           <ClassificationTable activeCategory={activeCategory} onChangeCategory={setActiveCategory} />
         </section>
-
-        <footer className="mt-12 pt-6 border-t border-[#E4DFD0] text-center">
-          <p className="text-[11px] text-[#9B968A]">{CONTEST.devBy}</p>
-        </footer>
       </div>
     </div>
   );
 }
+
 
