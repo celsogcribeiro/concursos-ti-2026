@@ -333,13 +333,13 @@ function ClassificationTable({
               <th className="px-3 py-2 font-medium w-14">Pos.</th>
               <th className="px-3 py-2 font-medium">Inscrição</th>
               <th className="px-3 py-2 font-medium">Nome</th>
-              <th className="px-3 py-2 font-medium text-right">Objetiva</th>
-              <th className="px-3 py-2 font-medium text-right">Discursiva</th>
-              <th className="px-3 py-2 font-medium text-right">Títulos</th>
-              <th className="px-3 py-2 font-medium text-right">
+              <th className="px-3 py-2 font-medium text-center">Objetiva</th>
+              <th className="px-3 py-2 font-medium text-center">Discursiva</th>
+              <th className="px-3 py-2 font-medium text-center">Títulos</th>
+              <th className="px-3 py-2 font-medium text-center">
                 <button
                   onClick={() => setSortDir(sortDir === "desc" ? "asc" : "desc")}
-                  className="flex items-center gap-1 ml-auto"
+                  className="flex items-center gap-1 mx-auto"
                 >
                   Nota final
                   {sortDir === "desc" ? <ChevronDown size={13} /> : <ChevronUp size={13} />}
@@ -362,10 +362,10 @@ function ClassificationTable({
                     ))}
                   </div>
                 </td>
-                <td className="px-3 py-2 text-right text-[#5B6472]">{c.notaObjetiva.toFixed(2)}</td>
-                <td className="px-3 py-2 text-right text-[#5B6472]">{c.notaDiscursiva.toFixed(2)}</td>
-                <td className="px-3 py-2 text-right text-[#5B6472]">{c.notaTitulos.toFixed(2)}</td>
-                <td className="px-3 py-2 text-right font-bold text-[#14213D]">{c.notaFinal.toFixed(2)}</td>
+                <td className="px-3 py-2 text-center text-[#5B6472]">{c.notaObjetiva.toFixed(2)}</td>
+                <td className="px-3 py-2 text-center text-[#5B6472]">{c.notaDiscursiva.toFixed(2)}</td>
+                <td className="px-3 py-2 text-center text-[#5B6472]">{c.notaTitulos.toFixed(2)}</td>
+                <td className="px-3 py-2 text-center font-bold text-[#14213D]">{c.notaFinal.toFixed(2)}</td>
               </tr>
             ))}
           </tbody>
