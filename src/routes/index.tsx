@@ -312,8 +312,8 @@ function ClassificationTable({
         })}
       </div>
 
-        <div className="flex items-center gap-2 mb-3">
-        <div className="relative flex-1 max-w-lg">
+      <div className="flex items-center gap-2 mb-3">
+        <div className="relative flex-1 max-w-xs">
           <Search size={15} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#9B968A]" />
           <input
             value={query}
@@ -322,9 +322,6 @@ function ClassificationTable({
             className="w-full pl-8 pr-3 py-1.5 text-[13px] border border-[#E4DFD0] rounded-md bg-white focus:outline-none focus:border-[#A9822F]"
           />
         </div>
-       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mb-4 w-full">
-
-       
         <p className="text-[12px] text-[#5B6472]">
           Exibindo {filtered.length} de {rawList.length} candidatos em {categoryLabel(activeCategory)}
         </p>
@@ -382,45 +379,6 @@ function ClassificationTable({
   );
 }
 
-function StatCard({ label, value }: { label: string; value: string }) {
-  const config = useMemo(() => {
-    if (label.includes("Média")) {
-      return {
-        accent: "#3B6FA0",
-        bg: "#EDF2F7",
-        border: "#B8C9DC",
-      };
-    }
-    if (label.includes("Maior")) {
-      return {
-        accent: "#A9822F",
-        bg: "#FBF6EA",
-        border: "#E6D6B5",
-      };
-    }
-    return {
-      accent: "#2F6B4F",
-      bg: "#EAF2ED",
-      border: "#A9C7B6",
-    };
-  }, [label]);
-
-  const { accent, bg, border } = config;
-
-  return (
-    <div
-      className="relative overflow-hidden rounded-xl p-4"
-      style={{ background: bg, border: `1px solid ${border}` }}
-    >
-      <div className="absolute left-0 top-0 bottom-0 w-1" style={{ background: accent }} />
-      <div>
-        <p className="text-[11px] uppercase tracking-wide" style={{ color: accent }}>{label}</p>
-        <p className="font-mono text-3xl text-[#14213D] mt-1.5">{value}</p>
-      </div>
-    </div>
-  );
-}
-
 /* ==========================================================================
    APP
    ========================================================================== */
@@ -430,7 +388,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-[#F7F4EC]" style={{ fontFamily: "Inter, system-ui, sans-serif" }}>
-      <div className="max-w-7xl mx-auto px-6 py-10">
+      <div className="max-w-4xl mx-auto px-6 py-10">
         {/* Masthead */}
         <header className="border-b-2 border-[#14213D] pb-6 mb-8">
           <div className="flex items-center gap-2 text-[#A9822F] mb-2">
@@ -445,7 +403,7 @@ function App() {
           </h1>
           <p className="text-[13px] text-[#5B6472] mt-1">{CONTEST.edital}</p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-1.5 mt-5 py-2.5 px-4 rounded-lg bg-white/60 border border-[#E5DFCF] text-sm">
             {(() => {
               const list = CANDIDATES[activeCategory] || [];
               const catLabel = CATEGORIES.find((c) => c.id === activeCategory)?.label ?? "";
@@ -455,13 +413,18 @@ function App() {
               const media = notas.length ? notas.reduce((a, b) => a + b, 0) / notas.length : 0;
               const maior = notas.length ? Math.max(...notas) : 0;
               const homologados = list.length;
-              return (
-                <>
-                  <StatCard label={`Média (${shortLabel})`} value={media.toFixed(2)} />
-                  <StatCard label="Maior nota" value={maior.toFixed(2)} />
-                  <StatCard label="Homologados" value={String(homologados)} />
-                </>
-              );
+              const items = [
+                { label: `Média (${shortLabel})`, value: media.toFixed(2) },
+                { label: "Maior nota", value: maior.toFixed(2) },
+                { label: "Homologados", value: String(homologados) },
+              ];
+              return items.map((item, i) => (
+                <div key={item.label} className="flex items-baseline gap-1.5">
+                  {i > 0 && <span className="text-[#D8D2C4] mr-3">|</span>}
+                  <span className="text-[11px] uppercase tracking-wide text-[#5B6472]">{item.label}</span>
+                  <span className="font-mono text-[#14213D] font-medium">{item.value}</span>
+                </div>
+              ));
             })()}
           </div>
         </header>
@@ -538,3 +501,4 @@ function App() {
     </div>
   );
 }
+
