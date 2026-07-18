@@ -457,9 +457,23 @@ function App() {
           <p className="text-[13px] text-[#5B6472] mt-1">{CONTEST.edital}</p>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
-            {CONTEST.stats.map((s) => (
-              <StatCard key={s.label} label={s.label} value={s.value} />
-            ))}
+            {(() => {
+              const list = CANDIDATES[activeCategory] || [];
+              const catLabel = CATEGORIES.find((c) => c.id === activeCategory)?.label ?? "";
+              const shortLabel =
+                activeCategory === "ac" ? "AC" : activeCategory === "pp" ? "PP" : activeCategory === "pcd" ? "PcD" : catLabel;
+              const notas = list.map((c) => c.notaFinal);
+              const media = notas.length ? notas.reduce((a, b) => a + b, 0) / notas.length : 0;
+              const maior = notas.length ? Math.max(...notas) : 0;
+              const homologados = list.length;
+              return (
+                <>
+                  <StatCard label={`Média (${shortLabel})`} value={media.toFixed(2)} />
+                  <StatCard label="Maior nota" value={maior.toFixed(2)} />
+                  <StatCard label="Homologados" value={String(homologados)} />
+                </>
+              );
+            })()}
           </div>
         </header>
 
