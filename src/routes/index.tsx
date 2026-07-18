@@ -466,7 +466,7 @@ function App() {
             </span>
             <span className="inline-flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#B0B4BB" }} />
-              <strong className="text-[#14213D] font-medium">Fora da estimativa</strong>
+              <strong className="text-[#14213D] font-medium">Classificados em detrimento de não ter PI e PQ aprovados</strong>
             </span>
           </div>
         </section>
