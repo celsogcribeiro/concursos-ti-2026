@@ -348,8 +348,8 @@ function ClassificationTable({
             </tr>
           </thead>
           <tbody>
-            {filtered.map((c, i) => (
-              <tr key={c.inscricao} className={i % 2 === 0 ? "bg-white" : "bg-[#F2FBF5]"}>
+            {filtered.map((c) => (
+              <tr key={c.inscricao} className="bg-[#F2FBF5]">
                 <td className="px-3 py-2">
                   <PositionBadge pos={c.posicao} vagas={activeCatConfig?.vagas ?? 0} limite={activeCatConfig?.limite ?? 0} />
                 </td>
@@ -362,10 +362,10 @@ function ClassificationTable({
                     ))}
                   </div>
                 </td>
-                <td className="px-3 py-2 text-right font-mono text-[#5B6472]">{c.notaObjetiva.toFixed(2)}</td>
-                <td className="px-3 py-2 text-right font-mono text-[#5B6472]">{c.notaDiscursiva.toFixed(2)}</td>
-                <td className="px-3 py-2 text-right font-mono text-[#5B6472]">{c.notaTitulos.toFixed(2)}</td>
-                <td className="px-3 py-2 text-right font-mono font-bold text-[#14213D]">{c.notaFinal.toFixed(2)}</td>
+                <td className="px-3 py-2 text-right text-[#5B6472]">{c.notaObjetiva.toFixed(2)}</td>
+                <td className="px-3 py-2 text-right text-[#5B6472]">{c.notaDiscursiva.toFixed(2)}</td>
+                <td className="px-3 py-2 text-right text-[#5B6472]">{c.notaTitulos.toFixed(2)}</td>
+                <td className="px-3 py-2 text-right font-bold text-[#14213D]">{c.notaFinal.toFixed(2)}</td>
               </tr>
             ))}
           </tbody>
