@@ -374,6 +374,56 @@ function ClassificationTable({
   );
 }
 
+function StatCard({ label, value }: { label: string; value: string }) {
+  const config = useMemo(() => {
+    if (label.includes("Média")) {
+      return {
+        icon: BarChart3,
+        accent: "#3B6FA0",
+        bg: "#EDF2F7",
+        border: "#B8C9DC",
+      };
+    }
+    if (label.includes("Maior")) {
+      return {
+        icon: Trophy,
+        accent: "#A9822F",
+        bg: "#FBF6EA",
+        border: "#E6D6B5",
+      };
+    }
+    return {
+      icon: Users,
+      accent: "#2F6B4F",
+      bg: "#EAF2ED",
+      border: "#A9C7B6",
+    };
+  }, [label]);
+
+  const { icon: Icon, accent, bg, border } = config;
+
+  return (
+    <div
+      className="relative overflow-hidden rounded-xl bg-white p-4"
+      style={{ border: `1px solid ${border}` }}
+    >
+      <div className="absolute left-0 top-0 bottom-0 w-1" style={{ background: accent }} />
+      <div className="flex items-start justify-between">
+        <div>
+          <p className="text-[11px] uppercase tracking-wide text-[#5B6472]">{label}</p>
+          <p className="font-mono text-3xl text-[#14213D] mt-1.5">{value}</p>
+        </div>
+        <div
+          className="w-10 h-10 rounded-lg flex items-center justify-center"
+          style={{ background: bg, color: accent, border: `1px solid ${border}` }}
+        >
+          <Icon size={20} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ==========================================================================
    APP
    ========================================================================== */
@@ -398,12 +448,9 @@ function App() {
           </h1>
           <p className="text-[13px] text-[#5B6472] mt-1">{CONTEST.edital}</p>
 
-          <div className="grid grid-cols-3 gap-4 mt-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
             {CONTEST.stats.map((s) => (
-              <div key={s.label} className="border-l-2 border-[#E4DFD0] pl-3">
-                <p className="text-[11px] uppercase tracking-wide text-[#5B6472]">{s.label}</p>
-                <p className="font-mono text-2xl text-[#14213D] mt-0.5">{s.value}</p>
-              </div>
+              <StatCard key={s.label} label={s.label} value={s.value} />
             ))}
           </div>
         </header>
