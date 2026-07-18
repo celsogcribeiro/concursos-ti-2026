@@ -221,18 +221,23 @@ function QuotaCard({
   );
 }
 
-function PositionBadge({ pos, vagas }: { pos: number; vagas: number }) {
-  const withinVagas = vagas > 0 && pos <= vagas;
+function PositionBadge({ pos, vagas, limite }: { pos: number; vagas: number; limite: number }) {
+  let bg = "#F1EFE7";
+  let border = "#D8D2C1";
+  let color = "#7A7566";
+  if (vagas > 0 && pos <= vagas) {
+    bg = "#DCF5E3";
+    border = "#7FC79A";
+    color = "#1F7A43";
+  } else if (limite > 0 && pos <= limite) {
+    bg = "#FDECD1";
+    border = "#F0B562";
+    color = "#8A5A16";
+  }
   return (
     <span
       className="inline-flex items-center justify-center rounded-full font-mono text-[12px] font-medium"
-      style={{
-        width: 30,
-        height: 30,
-        background: withinVagas ? "#DCF5E3" : "#FFFFFF",
-        border: `1px solid ${withinVagas ? "#7FC79A" : "#E4DFD0"}`,
-        color: withinVagas ? "#1F7A43" : "#5B6472",
-      }}
+      style={{ width: 30, height: 30, background: bg, border: `1px solid ${border}`, color }}
     >
       {pos}º
     </span>
