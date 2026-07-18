@@ -407,7 +407,7 @@ function App() {
               <p className="text-[13px] text-[#8D94A8] mt-1">{CONTEST.edital}</p>
             </div>
 
-            <div className="flex items-center divide-x divide-[#2C3E62] bg-[#1B2A4A] border border-[#2C3E62] rounded-xl shrink-0 self-center shadow-sm">
+            <div className="flex items-center divide-x divide-[#D4AF37]/30 bg-[#1B2A4A] border border-[#D4AF37] rounded-xl shrink-0 self-center shadow-[0_0_0_1px_rgba(212,175,55,0.15)]">
               {(() => {
                 const list = CANDIDATES[activeCategory] || [];
                 const catLabel = CATEGORIES.find((c) => c.id === activeCategory)?.label ?? "";
@@ -457,16 +457,14 @@ function App() {
             <span className="inline-flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#2F9F5E" }} />
               <strong className="text-[#14213D] font-medium">Vagas Imediatas</strong>
-              <span className="text-[#8A8F98]">— dentro do limite por modalidade</span>
             </span>
             <span className="inline-flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#E89B2A" }} />
               <strong className="text-[#14213D] font-medium">Cadastro de Reserva</strong>
-              <span className="text-[#8A8F98]">— posições seguintes, até o dobro das vagas</span>
             </span>
             <span className="inline-flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#B0B4BB" }} />
-              <strong className="text-[#14213D] font-medium">Fora da estimativa</strong>
+              <strong className="text-[#14213D] font-medium">Classificados em detrimento de não ter PI e PQ aprovados</strong>
             </span>
           </div>
         </section>
