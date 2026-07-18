@@ -227,10 +227,12 @@ function PositionBadge({ pos, vagas, limite }: { pos: number; vagas: number; lim
   let border = "#D8D2C1";
   let color = "#7A7566";
   if (vagas > 0 && pos <= vagas) {
+    // Vagas imediatas
     bg = "#DCF5E3";
     border = "#7FC79A";
     color = "#1F7A43";
-  } else if (limite > 0 && pos <= limite) {
+  } else if (limite > 0 && pos > vagas && pos <= vagas + limite) {
+    // Cadastro de reserva: começa a contar após as vagas imediatas
     bg = "#FDECD1";
     border = "#F0B562";
     color = "#8A5A16";
