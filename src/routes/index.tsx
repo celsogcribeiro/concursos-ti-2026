@@ -24,12 +24,12 @@ const CONTEST = {
   org: "Telebras",
   role: "Especialista em Gestão de Telecomunicações — Analista de Tecnologia da Informação (Brasília/DF)",
   edital: "Edital nº 12 – Telebras, de 23 de junho de 2026",
-  devBy: "Desenvolvido com Claude + Lovable",
+  devBy: "Desenvolvido por Celso Gustavo",
   
   stats: [
     { label: "Média (AC)", value: "102.85" },
     { label: "Maior nota", value: "122.70" },
-    { label: "Homologados", value: "32" },
+    { label: "Classificados", value: "32" },
   ],
 };
 
@@ -54,13 +54,13 @@ const CATEGORIES: Category[] = [
 ];
 
 const CATEGORY_STYLES: Record<string, { accent: string; tint: string; badgeBorder: string; badgeBg: string; badgeText: string }> = {
-  ac: { accent: "#C9A227", tint: "#FBF3DE", badgeBorder: "#8FB5E0", badgeBg: "#EAF2FB", badgeText: "#1D4E89" },
-  pp: { accent: "#C9A227", tint: "#FBF3DE", badgeBorder: "#D9C5F5", badgeBg: "#F1EAFB", badgeText: "#6D3FC4" },
-  pcd: { accent: "#C9A227", tint: "#FBF3DE", badgeBorder: "#F0C878", badgeBg: "#FDF1DC", badgeText: "#9A6B1D" },
+  ac: { accent: "#2E5C8A", tint: "#EAF2FB", badgeBorder: "#8FB5E0", badgeBg: "#EAF2FB", badgeText: "#1D4E89" },
+  pp: { accent: "#7A5AB0", tint: "#F4EEFC", badgeBorder: "#D9C5F5", badgeBg: "#F1EAFB", badgeText: "#6D3FC4" },
+  pcd: { accent: "#B8860A", tint: "#FDF4DD", badgeBorder: "#F0C878", badgeBg: "#FDF1DC", badgeText: "#9A6B1D" },
 };
 
 const QUOTA_BASE_NOTE =
-  "Contagem de candidatos homologados por modalidade de concorrência, conforme edital nº 12 – Telebras, de 23/06/2026. Candidatos de cota também classificados na Ampla Concorrência aparecem marcados como 'também em'.";
+  "Contagem de candidatos classificados por modalidade de concorrência, conforme edital nº 12 – Telebras, de 23/06/2026. Candidatos de cota também classificados na Ampla Concorrência aparecem marcados como 'também em'.";
 
 type Candidate = {
   posicao: number;
@@ -210,7 +210,7 @@ function QuotaCard({
         {selected && <CheckCircle2 size={15} style={{ color: style.accent }} />}
       </div>
       <p className="pl-2 mt-1 font-mono text-3xl text-[#14213D]">{category.classificados}</p>
-      <p className="pl-2 text-[12px] text-[#5B6472]">homologados</p>
+      <p className="pl-2 text-[12px] text-[#5B6472]">classificados</p>
       <div className="pl-2 mt-3 pt-3 border-t border-[#E3E5E9] flex items-baseline justify-between">
         <span className="text-[11px] text-[#5B6472]">1º lugar</span>
         <span className="font-mono text-sm text-[#14213D]">{best.toFixed(2)}</span>
@@ -420,7 +420,7 @@ function App() {
                 const items = [
                   { label: `Média (${shortLabel})`, value: media.toFixed(2) },
                   { label: "Maior nota", value: maior.toFixed(2) },
-                  { label: "Homologados", value: String(homologados) },
+                  { label: "Classificados", value: String(homologados) },
                 ];
                 return items.map((item) => (
                   <div key={item.label} className="px-6 py-4 text-center min-w-[120px]">
@@ -466,7 +466,7 @@ function App() {
             </span>
             <span className="inline-flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#B0B4BB" }} />
-              <strong className="text-[#14213D] font-medium">Classificados em detrimento de não ter PI e PQ aprovados</strong>
+              <strong className="text-[#14213D] font-medium">Fora da estimativa</strong>
             </span>
           </div>
         </section>
@@ -480,7 +480,7 @@ function App() {
         {/* Modality tiles */}
         <section className="mb-10">
           <h2 className="text-[13px] uppercase tracking-wide text-[#5B6472] mb-4">
-            Homologados por modalidade
+            Classificados por modalidade
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {CATEGORIES.map((cat) => (
