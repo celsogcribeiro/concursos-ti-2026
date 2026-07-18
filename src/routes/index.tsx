@@ -476,6 +476,23 @@ function App() {
               ))}
             </div>
           </div>
+
+          <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-[12px] text-[#5B6472]">
+            <span className="inline-flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#2F9F5E" }} />
+              <strong className="text-[#14213D] font-medium">Vagas Imediatas</strong>
+              <span className="text-[#7A7566]">— dentro do limite por modalidade</span>
+            </span>
+            <span className="inline-flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#E89B2A" }} />
+              <strong className="text-[#14213D] font-medium">Cadastro de Reserva</strong>
+              <span className="text-[#7A7566]">— posições seguintes, até o dobro das vagas</span>
+            </span>
+            <span className="inline-flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#B8B3A3" }} />
+              <strong className="text-[#14213D] font-medium">Fora da estimativa</strong>
+            </span>
+          </div>
         </section>
 
         {/* Homologation banner */}
