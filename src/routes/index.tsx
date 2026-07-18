@@ -45,7 +45,7 @@ const PHASES: Phase[] = [
   { id: 3, title: "Fase 3", desc: "Resultado final e homologação", status: "done", note: "Homologado em 23/06/2026" },
 ];
 
-const ALERT_TEXT = `Resultado final homologado. ${CONTEST.homologadoPor}.`;
+const ALERT_TEXT = "Resultado final homologado.";
 
 type Category = { id: string; label: string; classificados: number; vagas: number };
 
