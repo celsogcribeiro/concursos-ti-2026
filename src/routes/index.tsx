@@ -9,9 +9,6 @@ import {
   ChevronUp,
   ChevronDown,
   Award,
-  Users,
-  BarChart3,
-  Trophy,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -386,7 +383,6 @@ function StatCard({ label, value }: { label: string; value: string }) {
   const config = useMemo(() => {
     if (label.includes("Média")) {
       return {
-        icon: BarChart3,
         accent: "#3B6FA0",
         bg: "#EDF2F7",
         border: "#B8C9DC",
@@ -394,21 +390,19 @@ function StatCard({ label, value }: { label: string; value: string }) {
     }
     if (label.includes("Maior")) {
       return {
-        icon: Trophy,
         accent: "#A9822F",
         bg: "#FBF6EA",
         border: "#E6D6B5",
       };
     }
     return {
-      icon: Users,
       accent: "#2F6B4F",
       bg: "#EAF2ED",
       border: "#A9C7B6",
     };
   }, [label]);
 
-  const { icon: Icon, accent, bg, border } = config;
+  const { accent, bg, border } = config;
 
   return (
     <div
@@ -416,17 +410,9 @@ function StatCard({ label, value }: { label: string; value: string }) {
       style={{ background: bg, border: `1px solid ${border}` }}
     >
       <div className="absolute left-0 top-0 bottom-0 w-1" style={{ background: accent }} />
-      <div className="flex items-start justify-between">
-        <div>
-          <p className="text-[11px] uppercase tracking-wide" style={{ color: accent }}>{label}</p>
-          <p className="font-mono text-3xl text-[#14213D] mt-1.5">{value}</p>
-        </div>
-        <div
-          className="w-10 h-10 rounded-lg flex items-center justify-center bg-white"
-          style={{ color: accent, border: `1px solid ${border}` }}
-        >
-          <Icon size={20} />
-        </div>
+      <div>
+        <p className="text-[11px] uppercase tracking-wide" style={{ color: accent }}>{label}</p>
+        <p className="font-mono text-3xl text-[#14213D] mt-1.5">{value}</p>
       </div>
     </div>
   );
