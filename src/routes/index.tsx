@@ -312,7 +312,7 @@ function ClassificationTable({
         })}
       </div>
 
-      <div className="flex items-center gap-2 mb-3">
+     /* <div className="flex items-center gap-2 mb-3">
         <div className="relative flex-1 max-w-lg">
           <Search size={15} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#9B968A]" />
           <input
@@ -321,7 +321,20 @@ function ClassificationTable({
             placeholder="Buscar por nome ou inscrição"
             className="w-full pl-8 pr-3 py-1.5 text-[13px] border border-[#E4DFD0] rounded-md bg-white focus:outline-none focus:border-[#A9822F]"
           />
-        </div>
+        </div> */
+       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mb-4 w-full">
+  <div className="relative w-full max-w-xl"> {/* Mudado de max-w-xs para max-w-xl */}
+    <Search size={15} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#9B968A]" />
+    <input
+      value={query}
+      onChange={(e) => setQuery(e.target.value)}
+      placeholder="Buscar por nome ou inscrição"
+      className="w-full pl-8 pr-3 py-2 text-[13px] border border-[#E4DFD0] rounded-md bg-white focus:outline-none focus:border-[#A9822F]"
+    />
+  </div>
+
+
+       
         <p className="text-[12px] text-[#5B6472]">
           Exibindo {filtered.length} de {rawList.length} candidatos em {categoryLabel(activeCategory)}
         </p>
