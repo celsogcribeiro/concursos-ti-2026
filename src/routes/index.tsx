@@ -47,12 +47,12 @@ const PHASES: Phase[] = [
 
 const ALERT_TEXT = "Resultado final homologado.";
 
-type Category = { id: string; label: string; classificados: number; vagas: number };
+type Category = { id: string; label: string; classificados: number; vagas: number; limite: number };
 
 const CATEGORIES: Category[] = [
-  { id: "ac", label: "Ampla Concorrência", classificados: 32, vagas: 1 },
-  { id: "pp", label: "Pretos e Pardos", classificados: 24, vagas: 1 },
-  { id: "pcd", label: "PcD", classificados: 4, vagas: 0 },
+  { id: "ac", label: "Ampla Concorrência", classificados: 32, vagas: 1, limite: 31 },
+  { id: "pp", label: "Pretos e Pardos", classificados: 24, vagas: 1, limite: 13 },
+  { id: "pcd", label: "PcD", classificados: 4, vagas: 0, limite: 3 },
 ];
 
 const CATEGORY_STYLES: Record<string, { accent: string; tint: string; badgeBorder: string; badgeBg: string; badgeText: string }> = {
@@ -221,18 +221,23 @@ function QuotaCard({
   );
 }
 
-function PositionBadge({ pos, vagas }: { pos: number; vagas: number }) {
-  const withinVagas = vagas > 0 && pos <= vagas;
+function PositionBadge({ pos, vagas, limite }: { pos: number; vagas: number; limite: number }) {
+  let bg = "#F1EFE7";
+  let border = "#D8D2C1";
+  let color = "#7A7566";
+  if (vagas > 0 && pos <= vagas) {
+    bg = "#DCF5E3";
+    border = "#7FC79A";
+    color = "#1F7A43";
+  } else if (limite > 0 && pos <= limite) {
+    bg = "#FDECD1";
+    border = "#F0B562";
+    color = "#8A5A16";
+  }
   return (
     <span
       className="inline-flex items-center justify-center rounded-full font-mono text-[12px] font-medium"
-      style={{
-        width: 30,
-        height: 30,
-        background: withinVagas ? "#DCF5E3" : "#FFFFFF",
-        border: `1px solid ${withinVagas ? "#7FC79A" : "#E4DFD0"}`,
-        color: withinVagas ? "#1F7A43" : "#5B6472",
-      }}
+      style={{ width: 30, height: 30, background: bg, border: `1px solid ${border}`, color }}
     >
       {pos}º
     </span>
@@ -347,7 +352,7 @@ function ClassificationTable({
             {filtered.map((c, i) => (
               <tr key={c.inscricao} className={i % 2 === 0 ? "bg-white" : "bg-[#FBF9F3]"}>
                 <td className="px-3 py-2">
-                  <PositionBadge pos={c.posicao} vagas={activeCatConfig?.vagas ?? 0} />
+                  <PositionBadge pos={c.posicao} vagas={activeCatConfig?.vagas ?? 0} limite={activeCatConfig?.limite ?? 0} />
                 </td>
                 <td className="px-3 py-2 font-mono text-[#14213D]">{c.inscricao}</td>
                 <td className="px-3 py-2 text-[#14213D]">
@@ -404,18 +409,18 @@ function StatCard({ label, value }: { label: string; value: string }) {
 
   return (
     <div
-      className="relative overflow-hidden rounded-xl bg-white p-4"
-      style={{ border: `1px solid ${border}` }}
+      className="relative overflow-hidden rounded-xl p-4"
+      style={{ background: bg, border: `1px solid ${border}` }}
     >
       <div className="absolute left-0 top-0 bottom-0 w-1" style={{ background: accent }} />
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-[11px] uppercase tracking-wide text-[#5B6472]">{label}</p>
+          <p className="text-[11px] uppercase tracking-wide" style={{ color: accent }}>{label}</p>
           <p className="font-mono text-3xl text-[#14213D] mt-1.5">{value}</p>
         </div>
         <div
-          className="w-10 h-10 rounded-lg flex items-center justify-center"
-          style={{ background: bg, color: accent, border: `1px solid ${border}` }}
+          className="w-10 h-10 rounded-lg flex items-center justify-center bg-white"
+          style={{ color: accent, border: `1px solid ${border}` }}
         >
           <Icon size={20} />
         </div>
@@ -470,6 +475,23 @@ function App() {
                 <PhaseStamp key={phase.id} phase={phase} />
               ))}
             </div>
+          </div>
+
+          <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-[12px] text-[#5B6472]">
+            <span className="inline-flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#2F9F5E" }} />
+              <strong className="text-[#14213D] font-medium">Vagas Imediatas</strong>
+              <span className="text-[#7A7566]">— dentro do limite por modalidade</span>
+            </span>
+            <span className="inline-flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#E89B2A" }} />
+              <strong className="text-[#14213D] font-medium">Cadastro de Reserva</strong>
+              <span className="text-[#7A7566]">— posições seguintes, até o dobro das vagas</span>
+            </span>
+            <span className="inline-flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#B8B3A3" }} />
+              <strong className="text-[#14213D] font-medium">Fora da estimativa</strong>
+            </span>
           </div>
         </section>
 
