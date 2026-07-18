@@ -155,10 +155,10 @@ function PhaseStamp({ phase }: { phase: Phase }) {
         className={[
           "w-14 h-14 rounded-full flex items-center justify-center border-2 shrink-0",
           isDone
-            ? "border-[#A9822F] bg-[#A9822F] text-[#FBF6EA]"
+            ? "border-[#C9A227] bg-[#C9A227] text-[#FBF6EA]"
             : isCurrent
               ? "border-[#14213D] border-dashed bg-transparent text-[#14213D]"
-              : "border-[#C7C2B4] border-dashed bg-transparent text-[#9B968A]",
+              : "border-[#D1D5DB] border-dashed bg-transparent text-[#9CA3AF]",
         ].join(" ")}
       >
         {isDone ? (
@@ -174,7 +174,7 @@ function PhaseStamp({ phase }: { phase: Phase }) {
       <p
         className={[
           "mt-1 text-[11px] max-w-[9rem]",
-          isDone ? "text-[#2F6B4F]" : "text-[#9B968A]",
+          isDone ? "text-[#2F6B4F]" : "text-[#9CA3AF]",
         ].join(" ")}
       >
         {phase.note}
@@ -200,8 +200,8 @@ function QuotaCard({
       onClick={() => onSelect(category.id)}
       className="text-left rounded-lg p-4 relative overflow-hidden transition-colors"
       style={{
-        background: selected ? style.tint : "#FBF9F3",
-        border: selected ? `2px solid ${style.accent}` : "1px solid #E4DFD0",
+        background: selected ? style.tint : "#F9FAFB",
+        border: selected ? `2px solid ${style.accent}` : "1px solid #E3E5E9",
       }}
     >
       <div className="absolute left-0 top-0 bottom-0 w-1" style={{ background: style.accent }} />
@@ -211,7 +211,7 @@ function QuotaCard({
       </div>
       <p className="pl-2 mt-1 font-mono text-3xl text-[#14213D]">{category.classificados}</p>
       <p className="pl-2 text-[12px] text-[#5B6472]">homologados</p>
-      <div className="pl-2 mt-3 pt-3 border-t border-[#E4DFD0] flex items-baseline justify-between">
+      <div className="pl-2 mt-3 pt-3 border-t border-[#E3E5E9] flex items-baseline justify-between">
         <span className="text-[11px] text-[#5B6472]">1º lugar</span>
         <span className="font-mono text-sm text-[#14213D]">{best.toFixed(2)}</span>
       </div>
@@ -220,9 +220,9 @@ function QuotaCard({
 }
 
 function PositionBadge({ pos, vagas, limite }: { pos: number; vagas: number; limite: number }) {
-  let bg = "#F1EFE7";
-  let border = "#D8D2C1";
-  let color = "#7A7566";
+  let bg = "#F0F1F3";
+  let border = "#D9DBE0";
+  let color = "#8A8F98";
   let solid = false;
   if (vagas > 0 && pos <= vagas) {
     // Vagas imediatas
@@ -304,7 +304,7 @@ function ClassificationTable({
               style={{
                 background: isActive ? "#14213D" : "#FFFFFF",
                 color: isActive ? "#FFFFFF" : "#5B6472",
-                border: `1px solid ${isActive ? "#14213D" : "#E4DFD0"}`,
+                border: `1px solid ${isActive ? "#14213D" : "#E3E5E9"}`,
               }}
             >
               {cat.label}
@@ -315,12 +315,12 @@ function ClassificationTable({
 
       <div className="flex items-center gap-2 mb-3">
         <div className="relative flex-1 max-w-xs">
-          <Search size={15} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#9B968A]" />
+          <Search size={15} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#9CA3AF]" />
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Buscar por nome ou inscrição"
-            className="w-full pl-8 pr-3 py-1.5 text-[13px] border border-[#E4DFD0] rounded-md bg-white focus:outline-none focus:border-[#A9822F]"
+            className="w-full pl-8 pr-3 py-1.5 text-[13px] border border-[#E3E5E9] rounded-md bg-white focus:outline-none focus:border-[#C9A227]"
           />
         </div>
         <p className="text-[12px] text-[#5B6472]">
@@ -328,10 +328,10 @@ function ClassificationTable({
         </p>
       </div>
 
-      <div className="border border-[#E4DFD0] rounded-lg overflow-hidden">
+      <div className="border border-[#E3E5E9] rounded-lg overflow-hidden">
         <table className="w-full text-[13px] border-collapse">
           <thead>
-            <tr className="bg-[#F1ECDF] text-[#5B6472] text-left">
+            <tr className="bg-[#EFF0F3] text-[#5B6472] text-left">
               <th className="px-3 py-2 font-medium w-14">Pos.</th>
               <th className="px-3 py-2 font-medium">Inscrição</th>
               <th className="px-3 py-2 font-medium">Nome</th>
@@ -351,7 +351,7 @@ function ClassificationTable({
           </thead>
           <tbody>
             {filtered.map((c, i) => (
-              <tr key={c.inscricao} className={i % 2 === 0 ? "bg-white" : "bg-[#FBF9F3]"}>
+              <tr key={c.inscricao} className={i % 2 === 0 ? "bg-white" : "bg-[#F2FBF5]"}>
                 <td className="px-3 py-2">
                   <PositionBadge pos={c.posicao} vagas={activeCatConfig?.vagas ?? 0} limite={activeCatConfig?.limite ?? 0} />
                 </td>
@@ -373,7 +373,7 @@ function ClassificationTable({
           </tbody>
         </table>
       </div>
-      <p className="mt-2 text-[11px] text-[#9B968A]">
+      <p className="mt-2 text-[11px] text-[#9CA3AF]">
         Base: item 2.1.2 do Edital nº 12 – Telebras, de 23/06/2026. Resultado final homologado — não cabe recurso.
       </p>
     </div>
@@ -388,11 +388,11 @@ function App() {
   const [activeCategory, setActiveCategory] = useState<string>(CATEGORIES[0].id);
 
   return (
-    <div className="min-h-screen bg-[#F5F4EF]" style={{ fontFamily: "Inter, system-ui, sans-serif" }}>
+    <div className="min-h-screen bg-[#F3F4F6]" style={{ fontFamily: "Inter, system-ui, sans-serif" }}>
       {/* Masthead — faixa escura full-width */}
       <header className="bg-[#101B33]">
         <div className="max-w-4xl mx-auto px-6 py-6">
-          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-5">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
             <div>
               <div className="flex items-center gap-2 text-[#C9A227] mb-2">
                 <ShieldCheck size={18} />
@@ -407,7 +407,7 @@ function App() {
               <p className="text-[13px] text-[#8D94A8] mt-1">{CONTEST.edital}</p>
             </div>
 
-            <div className="flex flex-wrap gap-2 shrink-0">
+            <div className="flex items-center divide-x divide-[#2C3E62] bg-[#1B2A4A] border border-[#2C3E62] rounded-lg shrink-0 self-center">
               {(() => {
                 const list = CANDIDATES[activeCategory] || [];
                 const catLabel = CATEGORIES.find((c) => c.id === activeCategory)?.label ?? "";
@@ -423,7 +423,7 @@ function App() {
                   { label: "Homologados", value: String(homologados) },
                 ];
                 return items.map((item) => (
-                  <div key={item.label} className="bg-[#1B2A4A] border border-[#2C3E62] rounded-lg px-4 py-2 min-w-[110px]">
+                  <div key={item.label} className="px-4 py-2.5 text-center min-w-[100px]">
                     <p className="text-[10px] uppercase tracking-wide text-[#8D94A8]">{item.label}</p>
                     <p className="font-mono text-xl text-white mt-0.5">{item.value}</p>
                   </div>
@@ -439,10 +439,10 @@ function App() {
         {/* Phase timeline */}
         <section className="mb-10 mt-2">
           <h2 className="text-[13px] uppercase tracking-wide text-[#5B6472] mb-5 flex items-center gap-2">
-            <Award size={14} className="text-[#A9822F]" /> Andamento das fases
+            <Award size={14} className="text-[#C9A227]" /> Andamento das fases
           </h2>
           <div className="relative">
-            <div className="absolute top-7 left-7 right-7 h-px bg-[repeating-linear-gradient(90deg,#C7C2B4_0,#C7C2B4_6px,transparent_6px,transparent_12px)]" />
+            <div className="absolute top-7 left-7 right-7 h-px bg-[repeating-linear-gradient(90deg,#D1D5DB_0,#D1D5DB_6px,transparent_6px,transparent_12px)]" />
             <div
               className="grid gap-2 relative"
               style={{ gridTemplateColumns: `repeat(${PHASES.length}, minmax(0, 1fr))` }}
@@ -457,15 +457,15 @@ function App() {
             <span className="inline-flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#2F9F5E" }} />
               <strong className="text-[#14213D] font-medium">Vagas Imediatas</strong>
-              <span className="text-[#7A7566]">— dentro do limite por modalidade</span>
+              <span className="text-[#8A8F98]">— dentro do limite por modalidade</span>
             </span>
             <span className="inline-flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#E89B2A" }} />
               <strong className="text-[#14213D] font-medium">Cadastro de Reserva</strong>
-              <span className="text-[#7A7566]">— posições seguintes, até o dobro das vagas</span>
+              <span className="text-[#8A8F98]">— posições seguintes, até o dobro das vagas</span>
             </span>
             <span className="inline-flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#B8B3A3" }} />
+              <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#B0B4BB" }} />
               <strong className="text-[#14213D] font-medium">Fora da estimativa</strong>
             </span>
           </div>
@@ -492,7 +492,7 @@ function App() {
               />
             ))}
           </div>
-          <p className="mt-3 text-[11px] text-[#9B968A] max-w-2xl">{QUOTA_BASE_NOTE}</p>
+          <p className="mt-3 text-[11px] text-[#9CA3AF] max-w-2xl">{QUOTA_BASE_NOTE}</p>
         </section>
 
         {/* Classification table */}
@@ -504,5 +504,7 @@ function App() {
     </div>
   );
 }
+
+
 
 
