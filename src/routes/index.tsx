@@ -223,13 +223,11 @@ function PositionBadge({ pos, vagas, limite }: { pos: number; vagas: number; lim
   let bg = "#F0F1F3";
   let border = "#D9DBE0";
   let color = "#8A8F98";
-  let solid = false;
   if (vagas > 0 && pos <= vagas) {
     // Vagas imediatas
     bg = "#1F9D5C";
     border = "#1F9D5C";
     color = "#FFFFFF";
-    solid = true;
   } else if (limite > 0 && pos > vagas && pos <= vagas + limite) {
     // Cadastro de reserva: começa a contar após as vagas imediatas
     bg = "#FDECD1";
@@ -238,7 +236,7 @@ function PositionBadge({ pos, vagas, limite }: { pos: number; vagas: number; lim
   }
   return (
     <span
-      className={["inline-flex items-center justify-center rounded-full font-mono text-[12px]", solid ? "font-semibold" : "font-medium"].join(" ")}
+      className="inline-flex items-center justify-center rounded-full font-mono text-[12px] font-bold"
       style={{ width: 30, height: 30, background: bg, border: `1px solid ${border}`, color }}
     >
       {pos}º
@@ -313,17 +311,17 @@ function ClassificationTable({
         })}
       </div>
 
-      <div className="flex items-center gap-2 mb-3">
-        <div className="relative flex-1 max-w-xs">
+      <div className="mb-3">
+        <div className="relative">
           <Search size={15} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#9CA3AF]" />
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Buscar por nome ou inscrição"
-            className="w-full pl-8 pr-3 py-1.5 text-[13px] border border-[#E3E5E9] rounded-md bg-white focus:outline-none focus:border-[#C9A227]"
+            placeholder="Buscar por nome ou número de inscrição..."
+            className="w-full pl-8 pr-3 py-2 text-[13px] border border-[#E3E5E9] rounded-md bg-white focus:outline-none focus:border-[#C9A227]"
           />
         </div>
-        <p className="text-[12px] text-[#5B6472]">
+        <p className="text-[12px] text-[#5B6472] mt-2">
           Exibindo {filtered.length} de {rawList.length} candidatos em {categoryLabel(activeCategory)}
         </p>
       </div>
@@ -358,7 +356,7 @@ function ClassificationTable({
                 <td className="px-3 py-2 font-mono text-[#14213D]">{c.inscricao}</td>
                 <td className="px-3 py-2 text-[#14213D]">
                   <div className="flex flex-wrap items-center gap-1.5">
-                    <span>{c.nome}</span>
+                    <span className="font-semibold">{c.nome}</span>
                     {c.categorias.map((catId) => (
                       <CategoryBadge key={catId} categoryId={catId} />
                     ))}
@@ -367,7 +365,7 @@ function ClassificationTable({
                 <td className="px-3 py-2 text-right font-mono text-[#5B6472]">{c.notaObjetiva.toFixed(2)}</td>
                 <td className="px-3 py-2 text-right font-mono text-[#5B6472]">{c.notaDiscursiva.toFixed(2)}</td>
                 <td className="px-3 py-2 text-right font-mono text-[#5B6472]">{c.notaTitulos.toFixed(2)}</td>
-                <td className="px-3 py-2 text-right font-mono font-medium text-[#14213D]">{c.notaFinal.toFixed(2)}</td>
+                <td className="px-3 py-2 text-right font-mono font-bold text-[#14213D]">{c.notaFinal.toFixed(2)}</td>
               </tr>
             ))}
           </tbody>
