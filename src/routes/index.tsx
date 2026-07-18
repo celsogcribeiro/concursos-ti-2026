@@ -50,8 +50,9 @@ const ALERT_TEXT = "Resultado final homologado.";
 type Category = { id: string; label: string; classificados: number; vagas: number; limite: number };
 
 const CATEGORIES: Category[] = [
-  { id: "ac", label: "Ampla Concorrência", classificados: 32, vagas: 1, limite: 31 },
-  { id: "pp", label: "Pretos e Pardos", classificados: 24, vagas: 1, limite: 13 },
+  // limite = tamanho do cadastro de reserva (não inclui as vagas imediatas)
+  { id: "ac", label: "Ampla Concorrência", classificados: 32, vagas: 1, limite: 30 },
+  { id: "pp", label: "Pretos e Pardos", classificados: 24, vagas: 1, limite: 12 },
   { id: "pcd", label: "PcD", classificados: 4, vagas: 0, limite: 3 },
 ];
 
@@ -226,10 +227,12 @@ function PositionBadge({ pos, vagas, limite }: { pos: number; vagas: number; lim
   let border = "#D8D2C1";
   let color = "#7A7566";
   if (vagas > 0 && pos <= vagas) {
+    // Vagas imediatas
     bg = "#DCF5E3";
     border = "#7FC79A";
     color = "#1F7A43";
-  } else if (limite > 0 && pos <= limite) {
+  } else if (limite > 0 && pos > vagas && pos <= vagas + limite) {
+    // Cadastro de reserva: começa a contar após as vagas imediatas
     bg = "#FDECD1";
     border = "#F0B562";
     color = "#8A5A16";
