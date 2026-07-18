@@ -450,21 +450,6 @@ function App() {
               ))}
             </div>
           </div>
-
-          <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-[12px] text-[#5B6472]">
-            <span className="inline-flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#2F9F5E" }} />
-              <strong className="text-[#14213D] font-medium">Vagas Imediatas</strong>
-            </span>
-            <span className="inline-flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#E89B2A" }} />
-              <strong className="text-[#14213D] font-medium">Cadastro de Reserva</strong>
-            </span>
-            <span className="inline-flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#B0B4BB" }} />
-              <strong className="text-[#14213D] font-medium">Classificados em detrimento de não ter PI e PQ aprovados</strong>
-            </span>
-          </div>
         </section>
 
         {/* Homologation banner */}
@@ -489,6 +474,21 @@ function App() {
             ))}
           </div>
           <p className="mt-3 text-[11px] text-[#9CA3AF] max-w-2xl">{QUOTA_BASE_NOTE}</p>
+
+          <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-[12px] text-[#5B6472]">
+            <span className="inline-flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#2F9F5E" }} />
+              <strong className="text-[#14213D] font-medium">Vagas Imediatas</strong>
+            </span>
+            <span className="inline-flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#E89B2A" }} />
+              <strong className="text-[#14213D] font-medium">Cadastro de Reserva</strong>
+            </span>
+            <span className="inline-flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#B0B4BB" }} />
+              <strong className="text-[#14213D] font-medium">Classificados em detrimento de não ter PI e PQ aprovados</strong>
+            </span>
+          </div>
         </section>
 
         {/* Classification table */}
